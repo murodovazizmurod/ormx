@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
   name = 'ormx',
   packages = ['ormx', 'ORMX'],
-  version = '0.1',
+  version = '0.1.1',
   license='MIT',
   description = 'Simple Orm package',
   author = 'Murodov Azizmurod',
@@ -10,9 +10,7 @@ setup(
   url = 'https://github.com/murodovazizmurod/ormx',
   download_url = 'https://github.com/murodovazizmurod/ormx/archive/v_01.tar.gz', 
   keywords = ['ormx', 'orm', 'python-orm', 'python'],
-  install_requires=[
-          'sqlite3'
-    ],
+  install_requires=[],
   classifiers=[
     'Development Status :: 3 - Alpha', 
     'Intended Audience :: Developers',
