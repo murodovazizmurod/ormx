@@ -58,7 +58,9 @@ Types:
 
 - `str` - string('Linus'...),
 - `int` - integer(1,2,3 ...),
-- `bool` - boolean(True, False)
+- `bool` - boolean(True, False) or 1,0
+- `bytes` - bytes, blob
+- `float` - 3.15 ... 
 
 <hr>
 
