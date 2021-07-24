@@ -1,11 +1,28 @@
 import inspect
 
-from ..constants import *
+from ormx import *
 
 
 class Table:
+    """
+    Sub-class of Database, itself one table of Database
+    Have same methods but without table name argument
+    Attributes
+    ----------
+    name : str
+        Name of table
+    columns = list
+        Generator of columns in table
+    columns_names = list
+        Generator of column's names in table
+    """
 
     def __init__(self, **kwargs):
+        """
+        Parameters
+        ----------
+        Keyword Anguments
+        """
         self._data = {
             'id': None
         }
@@ -38,6 +55,16 @@ class Table:
         return CREATE_TABLE_SQL.format(name=cls._get_name(),
                                        fields=", ".join(fields))
 
+    @classmethod
+    def _get_column_names(cls):
+        fields = ['id']
+        for name, field in inspect.getmembers(cls):
+            if isinstance(field, Column):
+                fields.append(name)
+            if isinstance(field, ForeignKey):
+                fields.append(name + "_id")
+        return fields
+
     def _get_insert_sql(self):
         cls = self.__class__
         fields = []
@@ -61,18 +88,22 @@ class Table:
         return sql, values
 
     @classmethod
-    def _get_select_all_sql(cls):
-        fields = ['id']
-        for name, field in inspect.getmembers(cls):
-            if isinstance(field, Column):
-                fields.append(name)
-            if isinstance(field, ForeignKey):
-                fields.append(name + "_id")
+    def _get_first_sql(cls):
+        sql = SELECT_FIRST_SQL.format(name=cls._get_name())
 
+        return sql
+
+    @classmethod
+    def _get_select_all_sql(cls):
+        fields = cls._get_column_names()
         sql = SELECT_ALL_SQL.format(name=cls._get_name(),
                                     fields=", ".join(fields))
 
         return sql, fields
+
+    @classmethod
+    def _rows(cls):
+        return inspect.getmembers(cls)
 
     @classmethod
     def _get_select_where_sql(cls, **kwargs):

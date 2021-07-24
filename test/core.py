@@ -1,5 +1,3 @@
-import pytest
-
 from ormx import Database
 from ormx.models import (
     Table,
@@ -21,14 +19,14 @@ class Post(Table):
     author = ForeignKey(Author)
 
 
-db.create(Author)
-db.create(Post)
-
-db.save(Author(name="Linus", age=99))
-
-db.save(Post(title="Programming",
-             draft=False,
-             author=db.get(Author, 1)))
+# db.create(Author)
+# db.create(Post)
+#
+# db.save(Author(name="Linus", age=99))
+#
+# db.save(Post(title="Programming",
+#              draft=False,
+#              author=db.get(Author, 1)))
 
 test_post = db.get(Post, 1)
 test_author = db.get(Author, 1)
@@ -52,3 +50,8 @@ def test_post_title():
 
 def test_post_author():
     assert "Linus" == test_post.author.name
+
+
+db.first(Post)  # -> Post Object - Last row in table
+db['post']  # -> List - All rows in Post table
+db.tables  # -> List - List of Tables in Database
