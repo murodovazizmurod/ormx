@@ -91,6 +91,7 @@ class Post(Table):
     draft = Column(bool)
     author = ForeignKey(User)
 ```
+
 <b>
 Columns:
 
@@ -98,6 +99,7 @@ Columns:
 - draft - boolean
 - author - belongs to the `User` class in the example presented on the top.
 </b>
+
 ```python
 # Create all tables
 
