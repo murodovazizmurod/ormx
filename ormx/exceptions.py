@@ -7,6 +7,14 @@ class TableInfoError(MemoryError):
         return "Table doesn't exist or have no columns"
 
 
+class ConfigKeyNotFound(KeyError):
+    """
+    Config not found
+    """
+
+    def __str__(self):
+        return "Config not found"
+
 __all__ = [
     "TableInfoError",
 ]

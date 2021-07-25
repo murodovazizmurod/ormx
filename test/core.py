@@ -4,6 +4,7 @@ from ormx.models import (
     Column,
     ForeignKey
 )
+from ormx.testing import timeit
 
 db = Database("data.db")
 
@@ -27,31 +28,36 @@ class Post(Table):
 # db.save(Post(title="Programming",
 #              draft=False,
 #              author=db.get(Author, 1)))
+#
+# test_post = db.get(Post, 1)
+# test_author = db.get(Author, 1)
+#
+#
+# def test_authors():
+#     assert len(db.all(Author)) > 0
+#
+#
+# def test_posts():
+#     assert len(db.all(Post)) > 0
+#
+#
+# def test_author_name():
+#     assert 'Linus' == test_author.name
+#
+#
+# def test_post_title():
+#     assert "Programming" == test_post.title
+#
+#
+# def test_post_author():
+#     assert "Linus" == test_post.author.name
 
-test_post = db.get(Post, 1)
-test_author = db.get(Author, 1)
+
+print(db.config['testing'])
+
+db.config.set('testing', True)
 
 
-def test_authors():
-    assert len(db.all(Author)) > 0
+print(db.config['testing'])
 
 
-def test_posts():
-    assert len(db.all(Post)) > 0
-
-
-def test_author_name():
-    assert 'Linus' == test_author.name
-
-
-def test_post_title():
-    assert "Programming" == test_post.title
-
-
-def test_post_author():
-    assert "Linus" == test_post.author.name
-
-
-db.first(Post)  # -> Post Object - Last row in table
-db['post']  # -> List - All rows in Post table
-db.tables  # -> List - List of Tables in Database

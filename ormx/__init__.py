@@ -5,6 +5,7 @@ from .constants import *
 from .exceptions import *
 from .models import *
 from .models import Table
+from .config import Config
 
 
 class Database:
@@ -26,6 +27,7 @@ class Database:
         """
         self.conn = sqlite3.connect(path)
         self.cur = self.conn.cursor()
+        self.config = Config()
 
     def __getitem__(self, key) -> List:
         if key in self.tables:
@@ -112,6 +114,22 @@ class Database:
         fields, row = self._dereference(table, fields, row)
         data = dict(zip(fields, row))
         return table(**data)
+
+    def count(self, table: Union[Table] = None) -> int:
+        """
+        Returns first row from `table`
+        :params
+            table: Table Object that will used
+            type: Type of quering data
+        :return:
+            int: Number of row in column or tables
+        """
+        if table:
+            sql = table._get_count_sql()
+            row = int(self._execute(sql).fetchone()[0])
+            return row
+        else:
+            return len(self.tables)
 
     def get(self, table: Table, id: int) -> Table:
         """

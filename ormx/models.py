@@ -94,6 +94,12 @@ class Table:
         return sql
 
     @classmethod
+    def _get_count_sql(cls):
+        sql = SELECT_ALL_SQL.format(fields='COUNT(*)', name=cls._get_name())
+
+        return sql
+
+    @classmethod
     def _get_select_all_sql(cls):
         fields = cls._get_column_names()
         sql = SELECT_ALL_SQL.format(name=cls._get_name(),
