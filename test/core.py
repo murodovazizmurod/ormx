@@ -4,7 +4,6 @@ from ormx.models import (
     Column,
     ForeignKey
 )
-from ormx.testing import timeit
 
 db = Database("data.db")
 
@@ -18,6 +17,9 @@ class Post(Table):
     title = Column(str)
     draft = Column(bool)
     author = ForeignKey(Author)
+
+    def __repr__(self):
+        return f"{self.title}"
 
 
 # db.create(Author)
@@ -53,11 +55,10 @@ class Post(Table):
 #     assert "Linus" == test_post.author.name
 
 
-print(db.config['testing'])
+from ormx.testing import timeit
+
+print(timeit(db=db)(db.all)(Post))
 
 db.config.set('testing', True)
 
-
-print(db.config['testing'])
-
-
+print(timeit(db=db)(db.all)(Post))

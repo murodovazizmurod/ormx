@@ -136,6 +136,17 @@ users = db['user']
 
 <hr>
 
+<b>Get count of rows in table or count of tables in Database</b>
+
+```python
+db.count(Post) # -> int: count of rows in Post table
+```
+or
+```python
+db.count() # -> int: count of tables in database
+```
+<hr>
+
 <b>For fetching spec. object by their ID</b>
 
 > `Database.get(TABLE:Table, id:int)`
