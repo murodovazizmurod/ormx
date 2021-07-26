@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='ormx',
     packages=['ormx', 'ORMX'],
-    version='0.1.3',
+    version='0.1.4',
     license='MIT',
     description='Simple Orm package',
     author='Murodov Azizmurod',
