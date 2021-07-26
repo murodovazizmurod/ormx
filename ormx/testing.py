@@ -1,31 +1,12 @@
-import time
+from time import time
 
 
-def timeit(method, db):
-    def timed(*args, **kw):
-        if db.config['testing']:
-            ts = time.time()
-            result = method(*args, **kw)
-            te = time.time()
-            print('\n\n____________________\n%r  %2.2f ms\n____________________' % \
-                  (method.__name__, (te - ts) * 1000))
-            return result
-        return method(*args, **kw)
+def timeit(func):
+    def wrap_func(*args, **kwargs):
+        t1 = time()
+        result = func(*args, **kwargs)
+        t2 = time()
+        print(f'{func.__name__!r} executed in {(t2 - t1):.4f}s')
+        return result
 
-    return timed
-
-
-def timeit(db):
-    def decorator(function):
-        def wrapper(*args, **kwargs):
-            if db.config['testing']:
-                ts = time.time()
-                result = function(*args, **kwargs)
-                te = time.time()
-                print('\n\n____________________\n%r  %2.2f ms\n____________________' % \
-                      (function.__name__, (te - ts) * 1000))
-            else:
-                result = function(*args, **kwargs)
-            return result
-        return wrapper
-    return decorator
+    return wrap_func

@@ -1,11 +1,12 @@
 import sqlite3
-from typing import List, Literal, Union, Tuple, AnyStr
+from typing import List, Union, AnyStr, Tuple
 
 from .constants import *
 from .exceptions import *
 from .models import *
 from .models import Table
 from .config import Config
+from .testing import timeit
 
 
 class Database:
@@ -131,7 +132,7 @@ class Database:
         else:
             return len(self.tables)
 
-    def get(self, table: Table, id: int) -> Table:
+    def get(self, table: Table, **kwargs) -> Union[Table, Tuple]:
         """
         Returns row from `table` where ROWID equals `id`
         :params
@@ -140,11 +141,15 @@ class Database:
         :return:
             Table Object
         """
-        sql, fields, params = table._get_select_where_sql(id=id)
-        row = self._execute(sql, params).fetchone()
-        fields, row = self._dereference(table, fields, row)
-        data = dict(zip(fields, row))
-        return table(**data)
+        sql, fields, params = table._get_select_where_sql(**kwargs)
+        result = []
+        for row in self._execute(sql, params).fetchall():
+            new_fields, row = self._dereference(table, fields, row)
+            data = dict(zip(new_fields, row))
+            result.append(table(**data))
+        if len(result) == 1:
+            return result[0]
+        return tuple(result)
 
     def _dereference(self, table: Table, fields: List, row: Union[List, Tuple]) -> Tuple:
         new_fields = []
@@ -154,8 +159,8 @@ class Database:
                 # strip off "_id" to find field name
                 field = field[:-3]
                 fk = getattr(table, field)
-                # fetch object with the given ID
-                value = self.get(fk.table, value)
+                # # fetch object with the given ID
+                value = self.get(fk.table, id=value)
             new_fields.append(field)
             new_values.append(value)
         return new_fields, new_values

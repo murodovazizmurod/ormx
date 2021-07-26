@@ -147,13 +147,17 @@ db.count() # -> int: count of tables in database
 ```
 <hr>
 
-<b>For fetching spec. object by their ID</b>
+<b>For fetching spec. object by their column name</b>
 
-> `Database.get(TABLE:Table, id:int)`
+> `Database.get(TABLE:Table, **kwargs)`<br>
+
+`Returns List Object`
+<br>
 
 ```python
-user = db.get(User, 1)
+user = db.get(User, id=1, title='C++')
 ```
+
 
 <hr>
 <b>Fetch last data from table</b>
@@ -174,12 +178,40 @@ post = Post(title="C++",draft=False,author=user)
 db.save(post)
 
 # Fetch it!
-fetched = db.get(Post,1)
+fetched = db.get(Post, id=1)
 
 print(fetched.author.name)
 # >>> 'Linus'
 ```
 
+<hr>
+
+<b>One to Many Relation Example</b>
+
+```python
+class User(Table):
+    name = Column(str)
+    age = Column(int)
+    posts = Rel(Post)
+    
+    def __repr__(self):
+        return f"{self.name}"
+
+user = User(name='Gvido',
+            age=44)
+
+post = db.get(Post, id=1)
+
+db.save(user)
+
+# add data to `posts`
+user.posts.data.append(post)
+
+# remove data to `posts`
+user.posts.data.remove(post)
+
+# user.posts.data -> List Object
+```
 <hr>
 
 **In progress 🔄**
