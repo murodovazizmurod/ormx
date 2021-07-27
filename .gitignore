@@ -4,3 +4,4 @@ __pycache__/
 .vscode/
 ormx.egg-info/
 .idea/
+build/
