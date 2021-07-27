@@ -1,5 +1,12 @@
 import sqlite3
-from typing import List, Literal, Union, Tuple, AnyStr
+
+from typing import (
+    List,
+    Union,
+    Tuple,
+    AnyStr
+)
+from prettytable import PrettyTable
 
 from .constants import *
 from .exceptions import *
@@ -85,7 +92,7 @@ class Database:
         instance._data['id'] = cursor.lastrowid
         self.conn.commit()
 
-    def all(self, table: Table) -> List[Table]:
+    def all(self, table: Table, pretty_table: bool = False) -> List[Table]:
         """
         Returns all rows from `table`
         :params
@@ -93,13 +100,17 @@ class Database:
         :return:
             List of Table Objects
         """
-        sql, fields = table._get_select_all_sql()
         result = []
+        sql, fields = table._get_select_all_sql()
+        pretty = PrettyTable()
+        pretty.field_names = fields
+        
         for row in self._execute(sql).fetchall():
             new_fields, row = self._dereference(table, fields, row)
             data = dict(zip(new_fields, row))
             result.append(table(**data))
-        return result
+            pretty.add_row(list(row))
+        return print(pretty) if pretty_table else result
 
     def first(self, table: Union[Table]) -> Table:
         """
