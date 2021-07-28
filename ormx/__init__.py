@@ -4,9 +4,8 @@ from typing import List, Union, AnyStr, Tuple
 from .constants import *
 from .exceptions import *
 from .models import *
-from .models import Table
-from .config import Config
-from .testing import timeit
+from .config import *
+from .testing import *
 
 
 class Database:
@@ -26,7 +25,7 @@ class Database:
         path : PathType
             Local __str__ to database (PathType)
         """
-        self.conn = sqlite3.connect(path)
+        self.conn = sqlite3.connect(path, check_same_thread=False)
         self.cur = self.conn.cursor()
         self.config = Config()
 
@@ -165,5 +164,3 @@ class Database:
             new_values.append(value)
         return new_fields, new_values
 
-
-__all__ = [Database]

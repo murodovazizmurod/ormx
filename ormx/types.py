@@ -1,5 +1,6 @@
 from typing import Literal
 
+
 OrOptionsType = Literal[
     "ABORT",
     "FAIL",

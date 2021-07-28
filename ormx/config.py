@@ -22,3 +22,8 @@ class Config:
             raise ConfigKeyNotFound("Config not found")
 
         self.values[config] = value
+
+
+__all__ = [
+    "Config"
+]

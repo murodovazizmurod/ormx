@@ -9,9 +9,9 @@ from ormx.models import (
 db = Database("data.db")
 
 
-# class Author(Table):
-#     name = Column(str)
-#     age = Column(int)
+class Author(Table):
+    name = Column(str)
+    age = Column(int)
 
 
 class Post(Table):
@@ -33,7 +33,7 @@ class Post(Table):
 
 
 test_post = db.get(Post, id=1, title='Programming')
-# test_author = db.get(Author, id=1)
+test_author = db.get(Author, id=1)
 
 
 class User(Table):
@@ -47,9 +47,9 @@ class User(Table):
 
 # db.create(User)
 
-User.posts.data.append(test_post)
-
-print(User.posts)
+# User.posts.data.append(test_post)
+#
+# print(User.posts)
 
 # timeit(db.get(Post, draft=False))(db=db)
 
@@ -73,5 +73,27 @@ print(User.posts)
 # def test_post_author():
 #     assert "Linus" == test_post.author.name
 
+
+class Fact(Table):
+    name = Column(str)
+    posts = Rel(Post)
+
+
+# db.create(Fact)
+
+
+# db.save(Fact(name='Fact'))
+
+a = db.get(Fact, id=1)
+
+print(a.posts.add(test_post))
+print(a.posts)
+#
+#
+# a.posts.add(test_post)
+#
+# print(a.posts)
+
+# db.create_all([Fact, User])
 
 

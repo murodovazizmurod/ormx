@@ -10,3 +10,8 @@ def timeit(func):
         return result
 
     return wrap_func
+
+
+__all__ = [
+    'timeit'
+]

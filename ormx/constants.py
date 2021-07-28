@@ -12,3 +12,14 @@ SQLITE_TYPE_MAP = {
     bytes: "BLOB",
     bool: "INTEGER",  # 0 or 1
 }
+
+
+__all__ = [
+    "SELECT_TABLES_SQL",
+    "CREATE_TABLE_SQL",
+    "INSERT_SQL",
+    "SELECT_ALL_SQL",
+    "SELECT_FIRST_SQL",
+    "SELECT_WHERE_SQL",
+    "SQLITE_TYPE_MAP"
+]

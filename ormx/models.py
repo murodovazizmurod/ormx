@@ -1,6 +1,7 @@
 import inspect
 
 from ormx import *
+from ormx.exceptions import TableTypeInvalid
 
 
 class Table:
@@ -158,14 +159,20 @@ class Rel:
 
     def __init__(self, table):
         self.table = table
-        self.data: List[table: Table] = []
+        self._data: List[table: Table] = []
 
     def __str__(self):
-        return f"<Data{self.data}>"
+        return f"<Relation{self._data}>"
+
+    def add(self, table: Table) -> None:
+        if not isinstance(table, self.table):
+            raise TableTypeInvalid(table)
+        self._data.append(table)
 
 
 __all__ = [
     'Table',
     'Column',
-    'ForeignKey'
+    'ForeignKey',
+    'Rel'
 ]

@@ -2,10 +2,10 @@ from distutils.core import setup
 
 setup(
     name='ormx',
-    packages=['ormx', 'ORMX'],
-    version='0.1.4',
+    packages=['ormx'],
+    version='0.1.4.1',
     license='MIT',
-    description='Simple Orm package',
+    description='SQLite3 ORM package',
     author='Murodov Azizmurod',
     author_email='murodovazizmurod@gmail.com',
     url='https://github.com/murodovazizmurod/ormx',
