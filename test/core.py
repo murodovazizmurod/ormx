@@ -32,8 +32,8 @@ class Post(Table):
 #
 
 
-test_post = db.get(Post, id=1, title='Programming')
-test_author = db.get(Author, id=1)
+# test_post = db.get(Post, id=1, title='Programming')
+# test_author = db.all(Author)[0]
 
 
 class User(Table):
@@ -84,10 +84,14 @@ class Fact(Table):
 
 # db.save(Fact(name='Fact'))
 
-a = db.get(Fact, id=1)
+# a = db.get(Fact, id=1)
+#
+# print(a.posts.add(test_post))
+# print(a.posts)
 
-print(a.posts.add(test_post))
-print(a.posts)
+a = db.get(Author, id=2)
+print(db.delete(a))
+# print(a._name())
 #
 #
 # a.posts.add(test_post)

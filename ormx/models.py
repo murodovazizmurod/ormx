@@ -1,4 +1,5 @@
 import inspect
+from ormx.constants import DELETE_SQL
 
 from ormx import *
 from ormx.exceptions import TableTypeInvalid
@@ -111,6 +112,18 @@ class Table:
     @classmethod
     def _rows(cls):
         return inspect.getmembers(cls)
+
+    @classmethod
+    def _get_delete_sql(cls, **kwargs):
+        filters = []
+        params = []
+        for key, value in kwargs.items():
+            filters.append(key + " = ?")
+            params.append(value)
+        sql = DELETE_SQL.format(name=cls._get_name(),
+                                query=" AND ".join(filters))
+        
+        return sql, tuple(params)
 
     @classmethod
     def _get_select_where_sql(cls, **kwargs):

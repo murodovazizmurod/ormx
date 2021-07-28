@@ -1,10 +1,10 @@
-from typing import Literal
+# from typing import Literal
 
 
-OrOptionsType = Literal[
-    "ABORT",
-    "FAIL",
-    "IGNORE",
-    "REPLACE",
-    "ROLLBACK"
-]
+# OrOptionsType = Literal[
+#     "ABORT",
+#     "FAIL",
+#     "IGNORE",
+#     "REPLACE",
+#     "ROLLBACK"
+# ]

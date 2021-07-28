@@ -4,6 +4,7 @@ INSERT_SQL = 'INSERT INTO {name} ({fields}) VALUES ({placeholders});'
 SELECT_ALL_SQL = 'SELECT {fields} FROM {name};'
 SELECT_FIRST_SQL = 'SELECT * FROM {name} ORDER BY ROWID DESC LIMIT 1;'
 SELECT_WHERE_SQL = 'SELECT {fields} FROM {name} WHERE {query};'
+DELETE_SQL = 'DELETE FROM {name} WHERE {query};'
 
 SQLITE_TYPE_MAP = {
     int: "INTEGER",

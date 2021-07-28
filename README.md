@@ -147,6 +147,20 @@ db.count() # -> int: count of tables in database
 ```
 <hr>
 
+<b>Delete column</b>
+
+```python
+author = db.get(Author, id=1)
+
+db.delete(author)
+```
+
+Exceptions:
+
+`TableTypeInvalid`
+
+<hr>
+
 <b>For fetching spec. object by their column name</b>
 
 > `Database.get(TABLE:Table, **kwargs)`<br>
@@ -185,7 +199,8 @@ print(fetched.author.name)
 ```
 
 <hr>
-Don't use
+Don't use!!!
+
 <b>One to Many Relation Example</b>
 
 ```python

@@ -160,7 +160,18 @@ class Database:
             result.append(table(**data))
         if len(result) == 1:
             return result[0]
+        elif len(result) == 0:
+            return None
         return tuple(result)
+
+    def delete(self, instance: Table):
+        if isinstance(instance, Table):
+            sql, params = instance._get_delete_sql(id=instance.id)
+            self._execute(sql, params)
+            self.conn.commit()
+        else:
+            raise TableTypeInvalid(instance)
+
 
     def _dereference(self, table: Table, fields: List, row: Union[List, Tuple]) -> Tuple:
         new_fields = []
