@@ -75,8 +75,37 @@ db.create(TABLE:Table)
 """
 
 db.create(User)
+# or
+# db.create(User, Post)
 ```
 
+<hr>
+
+## Drop Table
+
+```python
+# db : Database
+
+db.drop(User)
+
+# You can add arguments such as `if_exists`
+# db.drop(User, if_exists=True) -> SQL request: `DROP TABLE IF EXISTS table_name`
+```
+
+<hr>
+
+## Configuration
+
+```python
+db.config.set(key, value)
+```
+
+<b>Example</b>
+
+```python
+# Testing mode
+db.config.set('testing', True)
+```
 <hr>
 
 ## Simple Relationships✨

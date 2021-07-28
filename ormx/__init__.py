@@ -4,7 +4,7 @@ from typing import (
     List,
     Union,
     Tuple,
-    AnyStr
+    AnyStr, Type
 )
 from prettytable import PrettyTable
 
@@ -13,6 +13,7 @@ from .constants import *
 from .exceptions import *
 from .models import *
 from .config import *
+from .models import Table
 from .testing import *
 
 
@@ -80,6 +81,11 @@ class Database:
         """
         self._execute(table._get_create_sql())
 
+    def drop(self, table: Type[Table], if_exists=False) -> None:
+        sql = table._get_drop_sql(exp=if_exists)
+        self._execute(sql)
+        self.conn.commit()
+
     def save(self, instance: Table):
         """
         Inserts data to `table`
@@ -111,7 +117,7 @@ class Database:
             data = dict(zip(new_fields, row))
             result.append(table(**data))
             pretty.add_row(list(row))
-        return print(pretty) if pretty_table else result
+        return print(pretty) if self.config['testing'] or pretty_table else result
 
     def first(self, table: Union[Table]) -> Table:
         """

@@ -1,5 +1,4 @@
 import inspect
-from ormx.constants import DELETE_SQL
 
 from ormx import *
 from ormx.exceptions import TableTypeInvalid
@@ -124,6 +123,12 @@ class Table:
                                 query=" AND ".join(filters))
         
         return sql, tuple(params)
+
+    @classmethod
+    def _get_drop_sql(cls, exp=None):
+        sql = DROP_SQL.format(name=cls._get_name(), exp=IF_EXISTS if exp else '')
+
+        return sql
 
     @classmethod
     def _get_select_where_sql(cls, **kwargs):

@@ -5,6 +5,7 @@ SELECT_ALL_SQL = 'SELECT {fields} FROM {name};'
 SELECT_FIRST_SQL = 'SELECT * FROM {name} ORDER BY ROWID DESC LIMIT 1;'
 SELECT_WHERE_SQL = 'SELECT {fields} FROM {name} WHERE {query};'
 DELETE_SQL = 'DELETE FROM {name} WHERE {query};'
+DROP_SQL = 'DROP TABLE {exp} {name};'
 
 SQLITE_TYPE_MAP = {
     int: "INTEGER",
@@ -14,6 +15,7 @@ SQLITE_TYPE_MAP = {
     bool: "INTEGER",  # 0 or 1
 }
 
+IF_EXISTS = "IF EXISTS"
 
 __all__ = [
     "SELECT_TABLES_SQL",
@@ -22,5 +24,8 @@ __all__ = [
     "SELECT_ALL_SQL",
     "SELECT_FIRST_SQL",
     "SELECT_WHERE_SQL",
-    "SQLITE_TYPE_MAP"
+    "SQLITE_TYPE_MAP",
+    "DELETE_SQL",
+    "DROP_SQL",
+    "IF_EXISTS"
 ]
