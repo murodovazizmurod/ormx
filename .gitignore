@@ -2,4 +2,7 @@ env/
 venv/
 __pycache__/
 .vscode/
-.idea
+ormx.egg-info/
+.idea/
+build/
+
