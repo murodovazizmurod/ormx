@@ -103,6 +103,14 @@ db.drop(User)
 }
 ```
 
+<b>Get value</b>
+```python
+db.config[value]
+```
+<b>Example</b>
+```python
+db.config['testing'] -> False
+```
 <b>Set value</b>
 ```python
 db.config.set(key, value)
