@@ -11,7 +11,9 @@ setup(
     url='https://github.com/murodovazizmurod/ormx',
     download_url='https://github.com/murodovazizmurod/ormx/archive/v_01.tar.gz',
     keywords=['ormx', 'orm', 'python-orm', 'python'],
-    install_requires=[],
+    install_requires=[
+        'prettytable'
+    ],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
