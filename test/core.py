@@ -2,23 +2,24 @@ from ormx import Database
 from ormx.models import (
     Table,
     Column,
-    ForeignKey
+    Rel
 )
-from ormx.testing import timeit
+
 
 db = Database("data.db")
 
 
-class Author(Table):
-    name = Column(str)
-    age = Column(int)
+# class Author(Table):
+#     name = Column(str)
+#     age = Column(int)
 
 
 class Post(Table):
     title = Column(str)
     draft = Column(bool)
-    author = ForeignKey(Author)
 
+    def __repr__(self):
+        return f"{self.title}"
 
 # db.create(Author)
 # db.create(Post)
@@ -29,10 +30,30 @@ class Post(Table):
 #              draft=False,
 #              author=db.get(Author, 1)))
 #
-# test_post = db.get(Post, 1)
-# test_author = db.get(Author, 1)
-#
-#
+
+
+test_post = db.get(Post, id=1, title='Programming')
+# test_author = db.get(Author, id=1)
+
+
+class User(Table):
+    name = Column(str)
+    age = Column(int)
+    posts = Rel(Post)
+
+    def __repr__(self):
+        return f"{self.name}"
+
+
+# db.create(User)
+
+User.posts.data.append(test_post)
+
+print(User.posts)
+
+# timeit(db.get(Post, draft=False))(db=db)
+
+
 # def test_authors():
 #     assert len(db.all(Author)) > 0
 #
@@ -52,12 +73,5 @@ class Post(Table):
 # def test_post_author():
 #     assert "Linus" == test_post.author.name
 
-
-print(db.config['testing'])
-
-db.config.set('testing', True)
-
-
-print(db.config['testing'])
 
 

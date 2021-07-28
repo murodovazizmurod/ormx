@@ -129,7 +129,13 @@ class Table:
         sql = SELECT_WHERE_SQL.format(name=cls._get_name(),
                                       fields=", ".join(fields),
                                       query=" AND ".join(filters))
-        return sql, fields, params
+        return sql, fields, tuple(params)
+
+    @classmethod
+    def _name(cls):
+        attributes = inspect.getmembers(cls, lambda a: not (inspect.isroutine(a)))
+        atrs = [a for a in attributes if not (a[0].startswith('__') and a[0].endswith('__'))]
+        return atrs
 
 
 class Column:
@@ -146,3 +152,20 @@ class ForeignKey:
 
     def __init__(self, table):
         self.table = table
+
+
+class Rel:
+
+    def __init__(self, table):
+        self.table = table
+        self.data: List[table: Table] = []
+
+    def __str__(self):
+        return f"<Data{self.data}>"
+
+
+__all__ = [
+    'Table',
+    'Column',
+    'ForeignKey'
+]
