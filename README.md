@@ -96,6 +96,14 @@ db.drop(User)
 
 ## Configuration
 
+### Default values
+```python
+{
+    "testing": False
+}
+```
+
+<b>Set value</b>
 ```python
 db.config.set(key, value)
 ```
