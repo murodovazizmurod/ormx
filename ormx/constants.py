@@ -6,6 +6,7 @@ SELECT_FIRST_SQL = 'SELECT * FROM {name} ORDER BY ROWID DESC LIMIT 1;'
 SELECT_WHERE_SQL = 'SELECT {fields} FROM {name} WHERE {query};'
 DELETE_SQL = 'DELETE FROM {name} WHERE {query};'
 DROP_SQL = 'DROP TABLE {exp} {name};'
+UPDATE_SQL = 'UPDATE {name} SET {fields} WHERE id = ?'
 
 SQLITE_TYPE_MAP = {
     int: "INTEGER",

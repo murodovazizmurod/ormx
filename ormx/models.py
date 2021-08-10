@@ -100,6 +100,28 @@ class Table:
 
         return sql
 
+    def _get_update_sql(self):
+        cls = self.__class__
+        fields = []
+        values = []
+
+        for name, field in inspect.getmembers(cls):
+            if isinstance(field, Column):
+                fields.append(name)
+                values.append(getattr(self, name))
+            elif isinstance(field, ForeignKey):
+                fields.append(name + "_id")
+                values.append(getattr(self, name).id)
+
+        values.append(getattr(self, 'id'))
+
+        sql = UPDATE_SQL.format(
+            name=cls.__name__.lower(),
+            fields=', '.join([f"{field} = ?" for field in fields])
+        )
+
+        return sql, values
+
     @classmethod
     def _get_select_all_sql(cls):
         fields = cls._get_column_names()

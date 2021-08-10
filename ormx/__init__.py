@@ -170,6 +170,11 @@ class Database:
             return None
         return tuple(result)
 
+    def update(self, instance: Table):
+        sql, values = instance._get_update_sql()
+        self.conn.execute(sql, values)
+        self.conn.commit()
+
     def delete(self, instance: Table):
         if isinstance(instance, Table):
             sql, params = instance._get_delete_sql(id=instance.id)

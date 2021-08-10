@@ -4,7 +4,7 @@ from ormx.exceptions import ConfigKeyNotFound
 
 defaults = {
         "testing": False
-    }
+}
 
 
 class Config:
