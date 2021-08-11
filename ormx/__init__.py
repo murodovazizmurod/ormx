@@ -34,7 +34,7 @@ class Database:
         path : PathType
             Local __str__ to database (PathType)
         """
-        self.conn = sqlite3.connect(path, check_same_thread=False)
+        self.conn = sqlite3.connect(path, check_same_thread=False, detect_types=sqlite3.PARSE_DECLTYPES)
         self.cur = self.conn.cursor()
         self.config = Config()
 

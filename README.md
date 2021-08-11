@@ -75,7 +75,34 @@ Types:
 - `bool` - boolean(True, False) or 1,0
 - `bytes` - bytes, blob
 - `float` - 3.15 ...
+- `datetime` - datetime object
 </b>
+  
+`Example:`
+```python
+class User(Table):
+    name = Column(str)
+    age = Column(int)
+    registered_at = Column(datetime)
+    online = Column(bool)
+
+    def __repr__(self):
+        return f"{self.name}"
+
+
+db.create(User)
+
+user = User(name='User', age=15, date=datetime.now())
+
+db.save(user)
+
+user = db.get(User, id=1)
+
+print(type(user.name)) # <class 'str'>
+print(type(user.age)) # <class 'int'>
+print(type(user.date)) # <class 'datetime.datetime'>
+print(type(user.online)) # <class 'bool'>
+```
 <hr>
 
 ## Creating Tables🎉

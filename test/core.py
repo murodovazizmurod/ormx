@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from ormx import Database
 from ormx.models import (
     Table,
@@ -39,10 +41,20 @@ test_author = db.all(Author)[0]
 class User(Table):
     name = Column(str)
     age = Column(int)
-    posts = Rel(Post)
+    registered_at = Column(datetime)
 
     def __repr__(self):
         return f"{self.name}"
+
+
+# db.create(User)
+#
+# user = User(name='User', age=15, date=datetime.now())
+#
+# db.save(user)
+#
+# user = db.get(User, id=1)
+# print(type(user.date))
 
 
 # def test_authors():
@@ -65,8 +77,8 @@ class User(Table):
 #     assert "Linus" == test_post.author.name
 
 
-user = db.get(Author, id=1)
-print(test_author.age)
-test_author.age = 15
-db.update(test_author)
-print(test_author.age)
+# user = db.get(Author, id=1)
+# print(test_author.age)
+# test_author.age = 15
+# db.update(test_author)
+# print(test_author.age)

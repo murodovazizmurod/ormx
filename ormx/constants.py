@@ -1,3 +1,5 @@
+from datetime import datetime
+
 SELECT_TABLES_SQL = "SELECT name FROM sqlite_master WHERE type = 'table';"
 CREATE_TABLE_SQL = "CREATE TABLE {name} ({fields});"
 INSERT_SQL = 'INSERT INTO {name} ({fields}) VALUES ({placeholders});'
@@ -14,6 +16,7 @@ SQLITE_TYPE_MAP = {
     str: "TEXT",
     bytes: "BLOB",
     bool: "INTEGER",  # 0 or 1
+    datetime: "TIMESTAMP"
 }
 
 IF_EXISTS = "IF EXISTS"
