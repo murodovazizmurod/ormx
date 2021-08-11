@@ -33,6 +33,20 @@ db = Database(database_file:str)
 
 <hr>
 
+### Properties
+`tables` - returns list of table names in database<br>
+```python
+tables(Database) -> List
+```
+Example:
+```python
+>> db.tables
+
+# ['posts', 'author']
+```
+
+<hr>
+
 ## Defining Tables ✏
 
 You should import Table, Column from `ormx.models`:
@@ -109,7 +123,7 @@ db.config[value]
 ```
 <b>Example</b>
 ```python
-db.config['testing'] -> False
+>> db.config['testing'] # -> False
 ```
 <b>Set value</b>
 ```python
@@ -120,13 +134,13 @@ db.config.set(key, value)
 
 ```python
 # Testing mode
-db.config.set('testing', True)
+>> db.config.set('testing', True)
 ```
 <hr>
 
 ## Simple Relationships✨
 
-> Foreign Key
+> `Foreign Key`
 
 Example:
 
@@ -183,6 +197,12 @@ users = db['user']
 
 <b>Get count of rows in table or count of tables in Database</b>
 
+#### `Source:`
+```python
+count(self, table: Union[Table] = None) -> int
+```
+<br/>
+
 ```python
 db.count(Post) # -> int: count of rows in Post table
 ```
@@ -190,6 +210,26 @@ or
 ```python
 db.count() # -> int: count of tables in database
 ```
+<hr>
+
+<b>Update data</b>
+
+```python
+Database.update(self, instance: Table)
+```
+`Example:`
+```python
+post = db.get(Post, id=1)
+
+print(post.title) # Old value
+
+post.title = 'New value'
+
+db.update(post)
+
+print(post.title) # New value
+```
+
 <hr>
 
 <b>Delete column</b>

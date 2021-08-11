@@ -1,7 +1,9 @@
 import inspect
 
 from ormx import *
+from ormx.constants import UPDATE_SQL
 from ormx.exceptions import TableTypeInvalid
+from ormx.constants import *
 
 
 class Table:
@@ -35,6 +37,11 @@ class Table:
         if key in _data:
             return _data[key]
         return object.__getattribute__(self, key)
+
+    def __setattr__(self, key, value):
+        super().__setattr__(key, value)
+        if key in self._data:
+            self._data[key] = value
 
     @classmethod
     def _get_name(cls):

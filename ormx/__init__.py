@@ -183,7 +183,6 @@ class Database:
         else:
             raise TableTypeInvalid(instance)
 
-
     def _dereference(self, table: Table, fields: List, row: Union[List, Tuple]) -> Tuple:
         new_fields = []
         new_values = []
