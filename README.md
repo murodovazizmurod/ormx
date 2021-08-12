@@ -19,7 +19,7 @@ $ pip install ormx
 
 | Version | Status                  | Tests and Actions |
 | ------- | ----------------------- | ----------------- |
-| `0.1`   | unstable, first version | ~                 |
+| `1.4.6`   | unstable, first version | ~                 |
 
 # **Usage**📖
 
@@ -384,7 +384,7 @@ print(fetched.author.name)
 ```
 
 <hr>
-Don't use!!!
+## Don't use!!!
 
 <b>One to Many Relation Example</b>
 
