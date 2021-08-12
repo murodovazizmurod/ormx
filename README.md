@@ -235,7 +235,7 @@ users = db.all(User)
 users = db['user']
 ```
 
-<i>`PrettyTabel` usage:</i>
+<i>`PrettyTable` usage:</i>
 
 ```python
 users = db.all(User, pretty_table=True)
