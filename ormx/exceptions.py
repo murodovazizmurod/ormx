@@ -54,11 +54,20 @@ class SortingTypeError(Exception):
         return f"{self.param} is incorrect sorting type, it must be on of {', '.join([f'`{i}`' for i in ORDER_BY_PARAMS])}"
 
 
+class LimitTooMuchParamsError(Exception):
+    def __init__(self, param):
+        self.param = param
+
+    def __str__(self):
+        return f"Maximum parameters count must be under 2, given {len(self.param)}"
+
+
 __all__ = [
     "TableInfoError",
     "ConfigKeyNotFound",
     "TableTypeInvalid",
     "OrderByParamError",
     "OrderByColumnError",
-    "SortingTypeError"
+    "SortingTypeError",
+    "LimitTooMuchParamsError"
 ]

@@ -3,8 +3,8 @@ from datetime import datetime
 SELECT_TABLES_SQL = "SELECT name FROM sqlite_master WHERE type = 'table';"
 CREATE_TABLE_SQL = "CREATE TABLE {name} ({fields});"
 INSERT_SQL = 'INSERT INTO {name} ({fields}) VALUES ({placeholders});'
-SELECT_ALL_SQL = 'SELECT {fields} FROM {name};'
-SELECT_ORDER_BY_SQL = 'SELECT {fields} FROM {name} ORDER BY {column} {type};'
+SELECT_ALL_SQL = 'SELECT {fields} FROM {name}'
+# SELECT_ORDER_BY_SQL = 'SELECT {fields} FROM {name}'
 SELECT_FIRST_SQL = 'SELECT * FROM {name} ORDER BY ROWID DESC LIMIT 1;'
 SELECT_WHERE_SQL = 'SELECT {fields} FROM {name} WHERE {query};'
 DELETE_SQL = 'DELETE FROM {name} WHERE {query};'
@@ -34,5 +34,5 @@ __all__ = [
     "DROP_SQL",
     "IF_EXISTS",
     "UPDATE_SQL",
-    "SELECT_ORDER_BY_SQL"
+    # "SELECT_ORDER_BY_SQL"
 ]

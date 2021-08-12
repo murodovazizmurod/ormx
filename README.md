@@ -268,6 +268,29 @@ Exceptions:
 `OrderByColumnError` - <b>`column` not exists</b><br><br>
 `SortingTypeError` - <b>second element of `order_by` tuple must be `ASC` or `DESC`</b>
 
+<hr>
+
+### <b>Limit Offset</b>
+`Code`:
+```python
+db.all(table: Table, order_by=(column_name, List[ASC, DESC]), limit=List[LIMIT, OFFSET])
+```
+
+`Example:`
+
+```python
+from ormx.types import DESC
+
+db.all(User, limit=[1]) # -> sql: SELECT id, age, name FROM author LIMIT 1
+
+db.all(User, limit=[10, 1]) # -> sql: SELECT id, age, name FROM author LIMIT 10 OFFSET 1
+
+db.all(User, order_by=('id', DESC), limit=[10, 1]) # -> sql: SELECT id, age, name FROM author ORDER BY id DESC LIMIT 10 OFFSET 1
+```
+
+Exceptions:
+
+`LimitTooMuchParamsError` - <b>given too much values in list</b><br><br>
 
 
 <hr>

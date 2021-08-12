@@ -1,7 +1,6 @@
 import inspect
 from typing import List
 
-
 from ormx.exceptions import *
 from ormx.constants import *
 from ormx.types import ORDER_BY_PARAMS
@@ -131,8 +130,10 @@ class Table:
         return sql, values
 
     @classmethod
-    def _get_select_all_sql(cls, order_by: tuple):
+    def _get_select_all_sql(cls, order_by: tuple, limit: list = None):
         fields = cls._get_column_names()
+        sql = SELECT_ALL_SQL.format(name=cls._get_name(),
+                                    fields=", ".join(fields))
         if order_by:
             if not isinstance(order_by, tuple):
                 raise OrderByParamError(order_by)
@@ -140,12 +141,20 @@ class Table:
                 raise OrderByColumnError(order_by[0])
             if not (order_by[1] in ORDER_BY_PARAMS):
                 raise SortingTypeError(order_by[1])
-            sql = SELECT_ORDER_BY_SQL.format(name=cls._get_name(),
-                                             fields=", ".join(fields), column=order_by[0],
-                                             type=order_by[1])
-        else:
-            sql = SELECT_ALL_SQL.format(name=cls._get_name(),
-                                        fields=", ".join(fields))
+            sql = sql + f' ORDER BY {order_by[0]} {order_by[1]}'
+        if limit:
+            if isinstance(limit, list):
+                for i in limit:
+                    if not isinstance(i, int): raise TypeError(
+                        f"Parameters must be int, not {type(i).__name__}")
+                if len(limit) == 1:
+                    sql += f' LIMIT {limit[0]}'
+                elif len(limit) == 2:
+                    sql += f' LIMIT {limit[0]} OFFSET {limit[1]}'
+                else:
+                    raise LimitTooMuchParamsError(limit)
+
+
 
         return sql, fields
 

@@ -39,7 +39,7 @@ class Post(Table):
 
 
 # test_post = db.get(Post, id=1, title='Programming')
-test_author = db.all(Author, order_by=('name', DESC))
+test_author = db.all(Author, order_by=('id', DESC), limit=[10, 1])
 
 
 class User(Table):
@@ -49,7 +49,6 @@ class User(Table):
 
     def __repr__(self):
         return f"{self.name}"
-
 
 # db.create(User)
 #
