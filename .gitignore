@@ -5,4 +5,5 @@ __pycache__/
 ormx.egg-info/
 .idea/
 build/
+node_modules/
 

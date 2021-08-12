@@ -62,6 +62,7 @@ Create any class by naming your table with including `Table` class:
 
 ```python
 class User(Table):
+    __tablename__ = 'users'
     name = Column(str)
     age = Column(int)
 ```
@@ -81,6 +82,7 @@ Types:
 `Example:`
 ```python
 class User(Table):
+    __tablename__ = 'users'
     name = Column(str)
     age = Column(int)
     registered_at = Column(datetime)

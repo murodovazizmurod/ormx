@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='ormx',
     packages=['ormx'],
-    version='0.1.4.2',
+    version='0.1.4.4',
     license='MIT',
     description='SQLite3 ORM package',
     author='Murodov Azizmurod',

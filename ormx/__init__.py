@@ -197,3 +197,7 @@ class Database:
             new_values.append(value)
         return new_fields, new_values
 
+
+__all__ = [
+    'Database'
+]

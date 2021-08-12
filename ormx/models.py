@@ -58,9 +58,8 @@ class Table:
                 fields.append((name, field.sql_type))
             elif isinstance(field, ForeignKey):
                 fields.append((name + "_id", "INTEGER"))
-
         fields = [" ".join(x) for x in fields]
-        return CREATE_TABLE_SQL.format(name=cls._get_name(),
+        return CREATE_TABLE_SQL.format(name=cls.__tablename__.split()[0] if hasattr(cls, '__tablename__') else cls._get_name(),
                                        fields=", ".join(fields))
 
     @classmethod

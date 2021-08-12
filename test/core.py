@@ -3,8 +3,7 @@ from datetime import datetime
 from ormx import Database
 from ormx.models import (
     Table,
-    Column,
-    Rel
+    Column
 )
 
 db = Database("data.db")
@@ -16,6 +15,7 @@ class Author(Table):
 
 
 class Post(Table):
+    __tablename__ = 'posts fds#@efsd'
     title = Column(str)
     draft = Column(bool)
 
