@@ -15,7 +15,7 @@ class Author(Table):
 
 
 class Post(Table):
-    __tablename__ = 'posts fds#@efsd'
+    __tablename__ = 'posts'
     title = Column(str)
     draft = Column(bool)
 
