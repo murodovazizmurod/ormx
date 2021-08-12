@@ -214,7 +214,16 @@ db.save(user)
 
 <b>For fetching all data:</b>
 
-> `Database.all(Table)`
+```python
+def all(self, table: Table, order_by: tuple = None, pretty_table: bool = False) -> List[Table]:
+    """
+    Returns all rows from `table`
+    :params
+        table: Table Object that will used
+    :return:
+        List of Table Objects
+    """
+```
 
 ```python
 users = db.all(User)
@@ -223,6 +232,41 @@ users = db.all(User)
 ```python
 users = db['user']
 ```
+
+<i>`PrettyTabel` usage:</i>
+
+```python
+users = db.all(User, pretty_table=True)
+
+# +----+-----+-------+
+# | id | age |  name |
+# +----+-----+-------+
+# | 1  |  99 | Linus |
+# | 2  |  99 | Linus |
+# | 3  |  99 | Linus |
+# | 4  |  99 | Linus |
+# ....
+
+```
+
+### <b>Order BY</b>
+`Example:`
+
+```python
+from ormx.types import ASC, DESC
+
+db.all(User, order_by=('name', ASC))
+
+db.all(Post, order_by=('title', DESC))
+```
+
+Exceptions:
+
+`OrderByParamError` - <b>order_by parameter must be `tuple`</b><br><br>
+`OrderByColumnError` - <b>`column` not exists</b><br><br>
+`SortingTypeError` - <b>second element of `order_by` tuple must be `ASC` or `DESC`</b>
+
+
 
 <hr>
 

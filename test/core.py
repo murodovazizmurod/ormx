@@ -5,6 +5,7 @@ from ormx.models import (
     Table,
     Column
 )
+from ormx.types import *
 
 db = Database("data.db")
 
@@ -12,6 +13,9 @@ db = Database("data.db")
 class Author(Table):
     name = Column(str)
     age = Column(int)
+
+    def __str__(self):
+        return self.name
 
 
 class Post(Table):
@@ -23,19 +27,19 @@ class Post(Table):
         return f"{self.title}"
 
 
-db.create(Author)
-db.create(Post)
+# db.create(Author)
+# db.create(Post)
+# #
+# db.save(Author(name="Linus", age=99))
 #
-db.save(Author(name="Linus", age=99))
-
-db.save(Post(title="Programming",
-             draft=False,
-             author=db.get(Author, id=1)))
-#
+# db.save(Post(title="Programming",
+#              draft=False,
+#              author=db.get(Author, id=1)))
+# #
 
 
-test_post = db.get(Post, id=1, title='Programming')
-test_author = db.all(Author)[0]
+# test_post = db.get(Post, id=1, title='Programming')
+test_author = db.all(Author, order_by=('name', DESC))
 
 
 class User(Table):

@@ -99,7 +99,7 @@ class Database:
         instance._data['id'] = cursor.lastrowid
         self.conn.commit()
 
-    def all(self, table: Table, pretty_table: bool = False) -> List[Table]:
+    def all(self, table: Table, order_by: tuple = None, pretty_table: bool = False) -> List[Table]:
         """
         Returns all rows from `table`
         :params
@@ -108,10 +108,9 @@ class Database:
             List of Table Objects
         """
         result = []
-        sql, fields = table._get_select_all_sql()
+        sql, fields = table._get_select_all_sql(order_by)
         pretty = PrettyTable()
         pretty.field_names = fields
-        
         for row in self._execute(sql).fetchall():
             new_fields, row = self._dereference(table, fields, row)
             data = dict(zip(new_fields, row))

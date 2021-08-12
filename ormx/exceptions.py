@@ -1,3 +1,6 @@
+from ormx.types import ORDER_BY_PARAMS
+
+
 class TableInfoError(MemoryError):
     """
     Table doesn't exist or have no columns
@@ -21,17 +24,41 @@ class TableTypeInvalid(TypeError):
     Config not found
     """
     def __init__(self, table):
-        if len(f"{type(table)}".split("'")[1].split('.')) > 1:
-            self.table = f"{type(table)}".split("'")[1].split('.')[1]
-        else:
-            self.table = f"{type(table)}".split("'")[1]
+        self.table = type(table).__class__.__name__
 
     def __str__(self):
         return f"argument must be type 'Table', not {self.table}"
 
 
+class OrderByParamError(Exception):
+    def __init__(self, param):
+        self.param = param
+
+    def __str__(self):
+        return f"Order by parameter must be tuple, not {type(self.param).__name__}"
+
+
+class OrderByColumnError(Exception):
+    def __init__(self, param):
+        self.param = param
+
+    def __str__(self):
+        return f"Column {self.param} is not exists"
+
+
+class SortingTypeError(Exception):
+    def __init__(self, param):
+        self.param = param
+
+    def __str__(self):
+        return f"{self.param} is incorrect sorting type, it must be on of {', '.join([f'`{i}`' for i in ORDER_BY_PARAMS])}"
+
+
 __all__ = [
     "TableInfoError",
     "ConfigKeyNotFound",
-    "TableTypeInvalid"
+    "TableTypeInvalid",
+    "OrderByParamError",
+    "OrderByColumnError",
+    "SortingTypeError"
 ]

@@ -1,10 +1,14 @@
-# from typing import Literal
+DESC = 'DESC'
+ASC = 'ASC'
 
+ORDER_BY_PARAMS = [
+    ASC,
+    DESC
+]
 
-# OrOptionsType = Literal[
-#     "ABORT",
-#     "FAIL",
-#     "IGNORE",
-#     "REPLACE",
-#     "ROLLBACK"
-# ]
+__all__ = [
+    'DESC',
+    'ASC',
+    'ORDER_BY_PARAMS'
+]
+

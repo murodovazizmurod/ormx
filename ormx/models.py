@@ -1,9 +1,10 @@
 import inspect
+from typing import List
 
-from ormx import *
-from ormx.constants import UPDATE_SQL
-from ormx.exceptions import TableTypeInvalid
+
+from ormx.exceptions import *
 from ormx.constants import *
+from ormx.types import ORDER_BY_PARAMS
 
 
 class Table:
@@ -59,8 +60,9 @@ class Table:
             elif isinstance(field, ForeignKey):
                 fields.append((name + "_id", "INTEGER"))
         fields = [" ".join(x) for x in fields]
-        return CREATE_TABLE_SQL.format(name=cls.__tablename__.split()[0] if hasattr(cls, '__tablename__') else cls._get_name(),
-                                       fields=", ".join(fields))
+        return CREATE_TABLE_SQL.format(
+            name=cls.__tablename__.split()[0] if hasattr(cls, '__tablename__') else cls._get_name(),
+            fields=", ".join(fields))
 
     @classmethod
     def _get_column_names(cls):
@@ -129,10 +131,21 @@ class Table:
         return sql, values
 
     @classmethod
-    def _get_select_all_sql(cls):
+    def _get_select_all_sql(cls, order_by: tuple):
         fields = cls._get_column_names()
-        sql = SELECT_ALL_SQL.format(name=cls._get_name(),
-                                    fields=", ".join(fields))
+        if order_by:
+            if not isinstance(order_by, tuple):
+                raise OrderByParamError(order_by)
+            if not (isinstance(order_by[0], str) and order_by[0] in fields):
+                raise OrderByColumnError(order_by[0])
+            if not (order_by[1] in ORDER_BY_PARAMS):
+                raise SortingTypeError(order_by[1])
+            sql = SELECT_ORDER_BY_SQL.format(name=cls._get_name(),
+                                             fields=", ".join(fields), column=order_by[0],
+                                             type=order_by[1])
+        else:
+            sql = SELECT_ALL_SQL.format(name=cls._get_name(),
+                                        fields=", ".join(fields))
 
         return sql, fields
 
@@ -149,7 +162,7 @@ class Table:
             params.append(value)
         sql = DELETE_SQL.format(name=cls._get_name(),
                                 query=" AND ".join(filters))
-        
+
         return sql, tuple(params)
 
     @classmethod
