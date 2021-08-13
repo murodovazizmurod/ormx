@@ -6,9 +6,15 @@ ORDER_BY_PARAMS = [
     DESC
 ]
 
+WHERE_OPTS = [
+    "<", "<<", "<=",
+    ">=", ">>", ">",
+    "=", "==", "!=", "<>"
+]
+
 __all__ = [
     'DESC',
     'ASC',
-    'ORDER_BY_PARAMS'
+    'ORDER_BY_PARAMS',
+    'WHERE_OPTS'
 ]
-

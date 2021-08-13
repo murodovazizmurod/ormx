@@ -23,6 +23,7 @@ class TableTypeInvalid(TypeError):
     """
     Config not found
     """
+
     def __init__(self, table):
         self.table = type(table).__class__.__name__
 
@@ -62,6 +63,14 @@ class LimitTooMuchParamsError(Exception):
         return f"Maximum parameters count must be under 2, given {len(self.param)}"
 
 
+class WhereTypeError(TypeError):
+    def __init__(self, param):
+        self.param = type(param).__name__
+
+    def __str__(self):
+        return f"Item's type must str or tuple, not {self.param}"
+
+
 __all__ = [
     "TableInfoError",
     "ConfigKeyNotFound",
@@ -69,5 +78,6 @@ __all__ = [
     "OrderByParamError",
     "OrderByColumnError",
     "SortingTypeError",
-    "LimitTooMuchParamsError"
+    "LimitTooMuchParamsError",
+    "WhereTypeError"
 ]

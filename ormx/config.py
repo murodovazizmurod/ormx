@@ -3,7 +3,7 @@ from typing import Any
 from ormx.exceptions import ConfigKeyNotFound
 
 defaults = {
-        "testing": False
+    "testing": False
 }
 
 

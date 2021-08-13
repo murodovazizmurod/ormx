@@ -1,9 +1,9 @@
 import inspect
 from typing import List
 
-from ormx.exceptions import *
 from ormx.constants import *
-from ormx.types import ORDER_BY_PARAMS
+from ormx.exceptions import *
+from ormx.types import *
 
 
 class Table:
@@ -130,10 +130,36 @@ class Table:
         return sql, values
 
     @classmethod
-    def _get_select_all_sql(cls, order_by: tuple, limit: list = None):
+    def _get_select_all_sql(cls,
+                            order_by: tuple,
+                            limit: list = None,
+                            where: list = None
+                            ):
+        params = []
         fields = cls._get_column_names()
         sql = SELECT_ALL_SQL.format(name=cls._get_name(),
                                     fields=", ".join(fields))
+
+        if where:
+            if isinstance(where[0], str):
+                if where[1] in WHERE_OPTS:
+                    sql += f' WHERE {where[0]} {where[1]} ?'
+                    params.append(where[2])
+            elif isinstance(where[0], tuple):
+                filters = []
+                sql += ' WHERE '
+                for i in where:
+                    if i[1] in WHERE_OPTS:
+                        filters.append(f"{i[0]} {i[1]} ?")
+                        params.append(i[2])
+                    else:
+                        raise TypeError(
+                            f"Second parameter in list is wrong, it must be one of: {', '.join(WHERE_OPTS)}")
+                sql += f" AND ".join(filters)
+
+            else:
+                raise WhereTypeError(where[0])
+
         if order_by:
             if not isinstance(order_by, tuple):
                 raise OrderByParamError(order_by)
@@ -141,7 +167,7 @@ class Table:
                 raise OrderByColumnError(order_by[0])
             if not (order_by[1] in ORDER_BY_PARAMS):
                 raise SortingTypeError(order_by[1])
-            sql = sql + f' ORDER BY {order_by[0]} {order_by[1]}'
+            sql += f' ORDER BY {order_by[0]} {order_by[1]}'
         if limit:
             if isinstance(limit, list):
                 for i in limit:
@@ -154,9 +180,7 @@ class Table:
                 else:
                     raise LimitTooMuchParamsError(limit)
 
-
-
-        return sql, fields
+        return sql, fields, tuple(params)
 
     @classmethod
     def _rows(cls):
@@ -182,12 +206,7 @@ class Table:
 
     @classmethod
     def _get_select_where_sql(cls, **kwargs):
-        fields = ['id']
-        for name, field in inspect.getmembers(cls):
-            if isinstance(field, Column):
-                fields.append(name)
-            if isinstance(field, ForeignKey):
-                fields.append(name + "_id")
+        fields = cls._get_column_names()
 
         filters = []
         params = []

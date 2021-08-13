@@ -251,6 +251,33 @@ users = db.all(User, pretty_table=True)
 
 ```
 
+<hr>
+
+### <b>Where</b>
+
+`Example:`
+```python
+db.all(Post, where=['title', '==', "Programming"])
+
+# or
+
+db.all(Post, where=[('title', '==', "Programming"),
+                    ('draft', '>', 0)]
+       )
+```
+
+`Conditions: `
+```python
+[
+    "<", "<<", "<=",
+    ">=", ">>", ">",
+    "=", "==", "!=", "<>"
+]
+```
+Exceptions:
+
+`WhereTypeError` - <b>given wrong type to `where`</b><br><br>
+
 ### <b>Order BY</b>
 `Example:`
 

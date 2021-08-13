@@ -1,18 +1,17 @@
 import sqlite3
-
 from typing import (
     List,
     Union,
     Tuple,
     AnyStr, Type
 )
+
 from prettytable import PrettyTable
 
-
+from .config import *
 from .constants import *
 from .exceptions import *
 from .models import *
-from .config import *
 from .models import Table
 from .testing import *
 
@@ -99,7 +98,8 @@ class Database:
         instance._data['id'] = cursor.lastrowid
         self.conn.commit()
 
-    def all(self, table: Table, order_by: tuple = None, limit: list = None, pretty_table: bool = False) -> List[Table]:
+    def all(self, table: Table, order_by: tuple = None, limit: list = None, where: list = None,
+            pretty_table: bool = False) -> List[Table]:
         """
         Returns all rows from `table`
         :params
@@ -108,15 +108,20 @@ class Database:
             List of Table Objects
         """
         result = []
-        sql, fields = table._get_select_all_sql(order_by, limit)
+        sql, fields, params = table._get_select_all_sql(order_by, limit, where)
         pretty = PrettyTable()
         pretty.field_names = fields
-        for row in self._execute(sql).fetchall():
-            new_fields, row = self._dereference(table, fields, row)
-            data = dict(zip(new_fields, row))
-            result.append(table(**data))
-            pretty.add_row(list(row))
-        return print(pretty) if self.config['testing'] or pretty_table else result
+        try:
+            for row in self._execute(sql, params).fetchall():
+                new_fields, row = self._dereference(table, fields, row)
+                data = dict(zip(new_fields, row))
+                result.append(table(**data))
+                pretty.add_row(list(row))
+            result = tuple(result)
+            if len(result) == 1: result = result[0]
+            return print(pretty) if self.config['testing'] or pretty_table else result
+        except AttributeError:
+            pass
 
     def first(self, table: Union[Table]) -> Table:
         """

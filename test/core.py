@@ -17,14 +17,14 @@ class Author(Table):
     def __str__(self):
         return self.name
 
+    def __repr__(self):
+        return self.name
+
 
 class Post(Table):
     __tablename__ = 'posts'
     title = Column(str)
     draft = Column(bool)
-
-    def __repr__(self):
-        return f"{self.title}"
 
 
 # db.create(Author)
@@ -37,9 +37,19 @@ class Post(Table):
 #              author=db.get(Author, id=1)))
 # #
 
+test_post = db.get(Post, title="Programming")
 
-# test_post = db.get(Post, id=1, title='Programming')
-test_author = db.all(Author, order_by=('id', DESC), limit=[10, 1])
+test_author = db.all(Post, where=[
+                        ('title', '==', "Programming")
+                    ],
+                     limit=[2]
+                     )
+
+print(test_author)
+
+
+# print(test_author, test_post)
+# print(test_author)
 
 
 class User(Table):
