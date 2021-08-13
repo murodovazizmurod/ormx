@@ -111,6 +111,7 @@ class Database:
         sql, fields, params = table._get_select_all_sql(order_by, limit, where)
         pretty = PrettyTable()
         pretty.field_names = fields
+        print(sql)
         try:
             for row in self._execute(sql, params).fetchall():
                 new_fields, row = self._dereference(table, fields, row)

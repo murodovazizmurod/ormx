@@ -254,6 +254,20 @@ users = db.all(User, pretty_table=True)
 <hr>
 
 ### <b>Where</b>
+Source:
+```python
+db.all(table: Table, where=['column_name', 'condition', 'value'])
+# or
+db.all(table: Table, where=[
+    ('column_name', 'condition', 'value'),
+    ('column_name2', 'condition2', 'value2')
+])
+```
+`SQL code:`
+```text
+SELECT id, draft, title FROM post WHERE title == ?;
+```
+<br>
 
 `Example:`
 ```python
