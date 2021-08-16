@@ -89,7 +89,7 @@ class Table:
                 values.append(getattr(self, name).id)
                 placeholders.append('?')
 
-        sql = INSERT_SQL.format(name=cls._get_name(),
+        sql = INSERT_SQL.format(name=cls.__tablename__.split()[0] if hasattr(cls, '__tablename__') else cls._get_name(),
                                 fields=", ".join(fields),
                                 placeholders=", ".join(placeholders))
 
@@ -205,8 +205,9 @@ class Table:
         return sql
 
     @classmethod
-    def _get_select_where_sql(cls, **kwargs):
-        fields = cls._get_column_names()
+    def _get_select_where_sql(cls, fields: list = None, **kwargs):
+        fields = fields or cls._get_column_names()
+        # print(kwargs)
 
         filters = []
         params = []
@@ -230,10 +231,17 @@ class Column:
 
     def __init__(self, type):
         self.type = type
+        print(locals())
 
     @property
     def sql_type(self):
         return SQLITE_TYPE_MAP[self.type]
+
+    def __eq__(self, other):
+        return f"{locals()}"
+
+    def __ne__(self, other):
+        return other, self.__class__.__name__
 
 
 class ForeignKey:

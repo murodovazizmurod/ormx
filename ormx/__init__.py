@@ -5,6 +5,7 @@ from typing import (
     Tuple,
     AnyStr, Type
 )
+import logging
 
 from prettytable import PrettyTable
 
@@ -14,6 +15,8 @@ from .exceptions import *
 from .models import *
 from .models import Table
 from .testing import *
+
+logging.basicConfig(format='%(asctime)s - INFO - %(message)s', level=logging.INFO)
 
 
 class Database:
@@ -36,6 +39,12 @@ class Database:
         self.conn = sqlite3.connect(path, check_same_thread=False, detect_types=sqlite3.PARSE_DECLTYPES)
         self.cur = self.conn.cursor()
         self.config = Config()
+
+    def __new__(cls, *args, **kwargs):
+        instance = super(Database, cls).__new__(cls)
+        # print('Database connected!')
+        logging.info('Database connected!')
+        return instance
 
     def __getitem__(self, key) -> List:
         if key in self.tables:
@@ -154,7 +163,7 @@ class Database:
         else:
             return len(self.tables)
 
-    def get(self, table: Table, **kwargs) -> Union[Table, Tuple]:
+    def get(self, table: Table, fields: list = None, **kwargs) -> Union[Table, Tuple]:
         """
         Returns row from `table` where ROWID equals `id`
         :params
@@ -163,7 +172,8 @@ class Database:
         :return:
             Table Object
         """
-        sql, fields, params = table._get_select_where_sql(**kwargs)
+
+        sql, fields, params = table._get_select_where_sql(fields=fields, **kwargs)
         result = []
         for row in self._execute(sql, params).fetchall():
             new_fields, row = self._dereference(table, fields, row)
