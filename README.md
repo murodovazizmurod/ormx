@@ -19,7 +19,7 @@ $ pip install ormx
 
 | Version | Status                  | Tests and Actions |
 | ------- | ----------------------- | ----------------- |
-| `0.1.4.6`   | unstable, first version | ~                 |
+| `0.1.4.8`   | unstable, first version | ~                 |
 
 # **Usage**📖
 
