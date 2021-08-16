@@ -40,11 +40,11 @@ class Post(Table):
 test_post = db.get(Post, title="Programming", fields=['title'])
 
 
-# test_author = db.all(Post, where=[
-#                         ('title', '==', "Programming")
-#                     ],
-#                      limit=[2]
-#                      )
+test_author = db.all(Post, where=[
+                        ('title', '==', "Programming")
+                    ],
+                     limit=[2]
+                     )
 
 
 # print(Author.name == 1)

@@ -45,7 +45,7 @@ class Table:
 
     @classmethod
     def _get_name(cls):
-        return cls.__name__.lower()
+        return cls.__tablename__.split()[0] if hasattr(cls, '__tablename__') else cls.__name__.lower()
 
     @classmethod
     def _get_create_sql(cls):

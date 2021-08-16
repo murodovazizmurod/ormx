@@ -1,3 +1,4 @@
+import logging
 import sqlite3
 from typing import (
     List,
@@ -5,7 +6,6 @@ from typing import (
     Tuple,
     AnyStr, Type
 )
-import logging
 
 from prettytable import PrettyTable
 
