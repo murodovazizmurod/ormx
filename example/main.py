@@ -16,6 +16,8 @@ class Post(Table):
     published = Column(str)
 
 
+# creating tables
+
 db.create(Post)
 
 
