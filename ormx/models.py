@@ -34,6 +34,7 @@ class Table:
 
     def __getattribute__(self, key):
         _data = object.__getattribute__(self, '_data')
+
         if key in _data:
             return _data[key]
         return object.__getattribute__(self, key)
@@ -60,7 +61,7 @@ class Table:
                 fields.append((name + "_id", "INTEGER"))
         fields = [" ".join(x) for x in fields]
         return CREATE_TABLE_SQL.format(
-            name=cls.__tablename__.split()[0] if hasattr(cls, '__tablename__') else cls._get_name(),
+            name=cls._get_name(),
             fields=", ".join(fields))
 
     @classmethod
@@ -89,7 +90,7 @@ class Table:
                 values.append(getattr(self, name).id)
                 placeholders.append('?')
 
-        sql = INSERT_SQL.format(name=cls.__tablename__.split()[0] if hasattr(cls, '__tablename__') else cls._get_name(),
+        sql = INSERT_SQL.format(name=cls._get_name(),
                                 fields=", ".join(fields),
                                 placeholders=", ".join(placeholders))
 
@@ -133,19 +134,20 @@ class Table:
     def _get_select_all_sql(cls,
                             order_by: tuple,
                             limit: list = None,
-                            where: list = None
+                            where: list = None,
+                            fields: list = None
                             ):
         params = []
-        fields = cls._get_column_names()
+        fields = cls._get_column_names() if fields is None else fields
         sql = SELECT_ALL_SQL.format(name=cls._get_name(),
                                     fields=", ".join(fields))
 
         if where:
             if isinstance(where[0], str):
                 if where[1] in WHERE_OPTS:
-                    sql += f' WHERE {where[0]} {where[1]} ?'
+                    sql += f' WHERE ({where[0]} {where[1]} ?)'
                     params.append(where[2])
-            elif isinstance(where[0], tuple):
+            elif all(isinstance(x, tuple) for x in where):
                 filters = []
                 sql += ' WHERE '
                 for i in where:
@@ -158,7 +160,16 @@ class Table:
                 sql += f" AND ".join(filters)
 
             else:
-                raise WhereTypeError(where[0])
+                for i in where[1::2]:
+                    if not i in WHERE_CONDITIONS:
+                        raise TypeError("Item's type must str or tuple")
+                sql += ' WHERE '
+                for i in where:
+                    if isinstance(i, tuple):
+                        sql += f"({i[0]} {i[1]} ?)"
+                        params.append(i[2])
+                    elif i in WHERE_CONDITIONS:
+                        sql += f' {i} '
 
         if order_by:
             if not isinstance(order_by, tuple):
@@ -207,7 +218,6 @@ class Table:
     @classmethod
     def _get_select_where_sql(cls, fields: list = None, **kwargs):
         fields = fields or cls._get_column_names()
-        # print(kwargs)
 
         filters = []
         params = []
@@ -227,11 +237,24 @@ class Table:
         return atrs
 
 
+class ListQuery:
+    def __init__(self, db, key):
+        self.db = db
+        self.key = key
+
+    def __new__(cls, key, db, *args, **kwargs) -> list:
+        if key in db.tables:
+            rows = db.cur.execute(f"SELECT * FROM {key}").fetchall()
+            fields = [description[0] for description in db.cur.description]
+            return [dict(zip(fields, rows[i])) for i in range(len(rows))]
+        else:
+            raise TableInfoError
+
+
 class Column:
 
     def __init__(self, type):
         self.type = type
-        print(locals())
 
     @property
     def sql_type(self):
@@ -267,6 +290,7 @@ class Rel:
 
 __all__ = [
     'Table',
+    'ListQuery',
     'Column',
     'ForeignKey',
     'Rel'

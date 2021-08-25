@@ -19,7 +19,7 @@ $ pip install ormx
 
 | Version | Status                  | Tests and Actions |
 | ------- | ----------------------- | ----------------- |
-| `0.1.4.8`   | unstable, first version | ~                 |
+| `0.1.4.10`   | unstable, first version | ~                 |
 
 # **Usage**📖
 
@@ -217,14 +217,33 @@ db.save(user)
 <b>For fetching all data:</b>
 
 ```python
-def all(self, table: Table, order_by: tuple = None, pretty_table: bool = False) -> List[Table]:
-    """
-    Returns all rows from `table`
-    :params
-        table: Table Object that will used
-    :return:
-        List of Table Objects
-    """
+    def all(self, table: Table,
+            order_by: tuple = None,
+            limit: list = None,
+            where: list = None,
+            fields: list = None,
+            pretty_table: bool = False) -> List[Table]:
+        """
+        Returns all rows from `table`
+        :params
+            table: Table Object that will used
+            order_by: name of column and sorting type. ex. ('title', ASC)
+            limit: list of integers. ex. [10, 2] -> LIMIT 10 OFFSET 2
+            where: list of filters.
+                ex: ['column_name', 'condition', 'value']
+                    or
+                    [
+                        ('name', '==', 'title'),
+                        AND,
+                        ('draft', '!=', 0),
+                        OR
+                        ('published', '>=', datetime.now())
+                    ]
+            fields: list of fields which will be returned. ex. ['title', 'published']
+            pretty_table: bool. Printing query with PrettyTable
+        :return:
+            List of Table Objects
+        """
 ```
 
 ```python
@@ -278,6 +297,20 @@ db.all(Post, where=['title', '==', "Programming"])
 db.all(Post, where=[('title', '==', "Programming"),
                     ('draft', '>', 0)]
        )
+
+# or
+
+db.all(Post, where=[
+             ('title', '==', 'title'),
+             AND,
+             ('draft', '!=', 0),
+             OR,
+             ('published', '>=', datetime.now())
+             ],
+             order_by=['title', DESC]
+             limit=[10, 2],
+             fields=['title', 'draft']
+       )
 ```
 
 `Conditions: `
@@ -285,7 +318,8 @@ db.all(Post, where=[('title', '==', "Programming"),
 [
     "<", "<<", "<=",
     ">=", ">>", ">",
-    "=", "==", "!=", "<>"
+    "=", "==", "!=", "<>",
+    "IN", "LIKE"
 ]
 ```
 Exceptions:

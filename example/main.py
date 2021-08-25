@@ -1,8 +1,10 @@
 import datetime
 
 from flask import Flask, render_template, request, url_for, redirect
+
 from ormx import Database
 from ormx.models import Table, Column
+
 app = Flask(__name__)
 db = Database('example/flask.db')
 
@@ -15,6 +17,8 @@ class Post(Table):
 
 
 db.create(Post)
+
+
 # or
 # db.create_all([Post])
 
@@ -27,7 +31,7 @@ def index():
         posts = []
     return render_template('index.html', posts=posts[::-1])
 
-    
+
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     if request.method == 'POST':

@@ -1,5 +1,6 @@
 import logging
 import sqlite3
+from sqlite3 import Cursor
 from typing import (
     List,
     Union,
@@ -42,19 +43,13 @@ class Database:
 
     def __new__(cls, *args, **kwargs):
         instance = super(Database, cls).__new__(cls)
-        # print('Database connected!')
         logging.info('Database connected!')
         return instance
 
-    def __getitem__(self, key) -> List:
-        if key in self.tables:
-            rows = self.cur.execute(f"SELECT * FROM {key}").fetchall()
-            fields = [description[0] for description in self.cur.description]
-            return [dict(zip(fields, rows[i])) for i in range(len(rows))]
-        else:
-            raise TableInfoError
+    def __getitem__(self, key) -> ListQuery:
+        return ListQuery(key, self)
 
-    def _execute(self, sql: str, params: AnyStr = None) -> Union[List, None]:
+    def _execute(self, sql: str, params: AnyStr = None) -> Cursor:
         """
         Execute any SQL-script whit (or without) values, or execute SQLRequest
         Parameters
@@ -79,7 +74,7 @@ class Database:
     def tables(self) -> List:
         return [x[0] for x in self._execute(SELECT_TABLES_SQL).fetchall()]
 
-    def create(self, table: Table) -> Union[None, AnyStr]:
+    def create(self, table: Table) -> None:
         """
         Creates table scheme
         :params
@@ -107,20 +102,37 @@ class Database:
         instance._data['id'] = cursor.lastrowid
         self.conn.commit()
 
-    def all(self, table: Table, order_by: tuple = None, limit: list = None, where: list = None,
+    def all(self, table: Table,
+            order_by: tuple = None,
+            limit: list = None,
+            where: list = None,
+            fields: list = None,
             pretty_table: bool = False) -> List[Table]:
         """
         Returns all rows from `table`
         :params
             table: Table Object that will used
+            order_by: name of column and sorting type. ex. ('title', ASC)
+            limit: list of integers. ex. [10, 2] -> LIMIT 10 OFFSET 2
+            where: list of filters.
+                ex: ['column_name', 'condition', 'value']
+                    or
+                    [
+                        ('name', '==', 'title'),
+                        AND,
+                        ('draft', '!=', 0),
+                        OR
+                        ('published', '>=', datetime.now())
+                    ]
+            fields: list of fields which will be returned. ex. ['title', 'published']
+            pretty_table: bool. Printing query with PrettyTable
         :return:
             List of Table Objects
         """
         result = []
-        sql, fields, params = table._get_select_all_sql(order_by, limit, where)
+        sql, fields, params = table._get_select_all_sql(order_by, limit, where, fields)
         pretty = PrettyTable()
         pretty.field_names = fields
-        print(sql)
         try:
             for row in self._execute(sql, params).fetchall():
                 new_fields, row = self._dereference(table, fields, row)
@@ -163,12 +175,12 @@ class Database:
         else:
             return len(self.tables)
 
-    def get(self, table: Table, fields: list = None, **kwargs) -> Union[Table, Tuple]:
+    def get(self, table: Table, fields: list = None, **kwargs) -> Union[Table, tuple, None]:
         """
         Returns row from `table` where ROWID equals `id`
         :params
             table: Table Object that will used
-            id: Integer - ROWID
+            fields: List - searching fields with value
         :return:
             Table Object
         """

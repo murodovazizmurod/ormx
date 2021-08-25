@@ -7,14 +7,14 @@
     <title>Posts</title>
 </head>
 <body>
-    <a href="/add">Add New Post</a>
-    {% for post in posts %}
-        <h1>{{post.title}}</h1>
-        <p>{{ post.text }}</p>
-        <span>{{ post.published }}</span><br><br>
-        <a href="/delete/{{ post.id }}" style="background-color: red; color: white; padding: 8px;">Delete</a>
-        <a href="/update/{{ post.id }}" style="background-color: lightblue; color: white; padding: 8px;">Update</a>
-        <hr>
-    {% endfor %}
+<a href="/add">Add New Post</a>
+{% for post in posts %}
+<h1>{{post.title}}</h1>
+<p>{{ post.text }}</p>
+<span>{{ post.published }}</span><br><br>
+<a href="/delete/{{ post.id }}" style="background-color: red; color: white; padding: 8px;">Delete</a>
+<a href="/update/{{ post.id }}" style="background-color: lightblue; color: white; padding: 8px;">Update</a>
+<hr>
+{% endfor %}
 </body>
 </html>
