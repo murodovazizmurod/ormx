@@ -116,7 +116,7 @@ print(type(user.date)) # <class 'datetime.datetime'>
 print(type(user.online)) # <class 'bool'>
 ```
 
-<b>New Feature</b>
+### <b>New Feature</b>
 Now you can add default values for each column.
 
 `Example:`
@@ -124,7 +124,7 @@ Now you can add default values for each column.
 ```python
 class Post(Table):
     __tablename__ = 'posts'
-    title = Column(str, 'some title')
+    title = Column(str, default='some title')
     draft = Column(bool, default=True)
 ```
 
