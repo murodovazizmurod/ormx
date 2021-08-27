@@ -83,11 +83,25 @@ class Table:
         for name, field in inspect.getmembers(cls):
             if isinstance(field, Column):
                 fields.append(name)
-                values.append(getattr(self, name))
+
+                if field.default and isinstance(getattr(self, name), Column):
+                    if type(field.default) == field.type:
+                        values.append(field.default if type(getattr(self, name)).__name__ == 'Column' and type(
+                            field.default) == field.type else getattr(self, name))
+                    else:
+                        raise TypeError(
+                            f'Excepted {field.type.__name__}, but given {type(field.default).__name__} type for default value')
+                else:
+                    if type(getattr(self, name)) == field.type:
+                        values.append(getattr(self, name))
+                    else:
+                        raise TypeError(
+                            f'Excepted {field.type.__name__}, but given {type(getattr(self, name)).__name__} type for value')
+
                 placeholders.append('?')
             elif isinstance(field, ForeignKey):
                 fields.append(name + "_id")
-                values.append(getattr(self, name).id)
+                values.append(getattr(self, name).id if isinstance(getattr(self, name), Table) else 0)
                 placeholders.append('?')
 
         sql = INSERT_SQL.format(name=cls._get_name(),
@@ -178,16 +192,21 @@ class Table:
                 raise OrderByColumnError(order_by[0])
             if not (order_by[1] in ORDER_BY_PARAMS):
                 raise SortingTypeError(order_by[1])
-            sql += f' ORDER BY {order_by[0]} {order_by[1]}'
+            sql += f' ORDER BY {order_by[0]} ?'
+            params.append(order_by[1])
+
         if limit:
             if isinstance(limit, list):
                 for i in limit:
                     if not isinstance(i, int): raise TypeError(
                         f"Parameters must be int, not {type(i).__name__}")
                 if len(limit) == 1:
-                    sql += f' LIMIT {limit[0]}'
+                    sql += f' LIMIT ?'
+                    params.append(limit[0])
                 elif len(limit) == 2:
-                    sql += f' LIMIT {limit[0]} OFFSET {limit[1]}'
+                    sql += f' LIMIT ? OFFSET ?'
+                    params.append(limit[0])
+                    params.append(limit[1])
                 else:
                     raise LimitTooMuchParamsError(limit)
 
@@ -253,18 +272,13 @@ class ListQuery:
 
 class Column:
 
-    def __init__(self, type):
+    def __init__(self, type, default=None):
         self.type = type
+        self.default = default
 
     @property
     def sql_type(self):
         return SQLITE_TYPE_MAP[self.type]
-
-    def __eq__(self, other):
-        return f"{locals()}"
-
-    def __ne__(self, other):
-        return other, self.__class__.__name__
 
 
 class ForeignKey:

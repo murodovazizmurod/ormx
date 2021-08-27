@@ -3,14 +3,13 @@ from ormx.models import (
     Table,
     Column, ForeignKey
 )
-from ormx.types import *
 
 db = Database("data.db")
 
 
 class Author(Table):
-    name = Column(str)
-    age = Column(int)
+    name = Column(str, default='name')
+    age = Column(int, default=15)
 
     def __str__(self):
         return self.name
@@ -22,13 +21,17 @@ class Author(Table):
 class Post(Table):
     __tablename__ = 'posts'
     title = Column(str)
-    draft = Column(bool)
+    draft = Column(bool, default=True)
     author = ForeignKey(Author)
+
 
 # db.create(Author)
 # db.create(Post)
 # #
-# author = Author(name="Linus", age=99)
+
+
+# author = Post(title='Test', draft=False)
+#
 # db.save(author)
 
 
@@ -38,6 +41,5 @@ class Post(Table):
 test_post = db.get(Post, author_id=1)
 #
 #
-test_author = db.all(Post, where=['author_id', '==', 1])
 
 print(test_post)

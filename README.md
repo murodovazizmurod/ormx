@@ -25,7 +25,7 @@ $ pip install ormx
 
 | Version | Status                  | Tests and Actions |
 | ------- | ----------------------- | ----------------- |
-| `0.1.4.10`   | unstable, first version | ~                 |
+| `0.1.4.12`   | unstable, first version | ~                 |
 
 # **Usage**📖
 
@@ -115,6 +115,19 @@ print(type(user.age)) # <class 'int'>
 print(type(user.date)) # <class 'datetime.datetime'>
 print(type(user.online)) # <class 'bool'>
 ```
+
+<b>New Feature</b>
+Now you can add default values for each column.
+
+`Example:`
+
+```python
+class Post(Table):
+    __tablename__ = 'posts'
+    title = Column(str, 'some title')
+    draft = Column(bool, default=True)
+```
+
 <hr>
 
 ## Creating Tables🎉
@@ -465,34 +478,16 @@ print(fetched.author.name)
 ```
 
 <hr>
-## Don't use!!!
 
-<b>One to Many Relation Example</b>
+## Some Examples:
 
-```python
-class User(Table):
-    name = Column(str)
-    age = Column(int)
-    posts = Rel(Post)
-    
-    def __repr__(self):
-        return f"{self.name}"
+<b>Flask + ORMX CRUD app: https://ec099b10e8.pythonanywhere.com/ </b>
 
-user = User(name='Gvido',
-            age=44)
+<b>Photo-Sharing app: https://photo-sharing-ormx.herokuapp.com/ </b>
 
-post = db.get(Post, id=1)
 
-db.save(user)
+<b>Article: https://community.uzbekcoders.uz/post/photo-sharing-dasturini-yaratamiz---flask-ormx-cloud-cdn-612787f94f5a32648e01ccc3 </b>
 
-# add data to `posts`
-user.posts.data.append(post)
-
-# remove data to `posts`
-user.posts.data.remove(post)
-
-# user.posts.data -> List Object
-```
 <hr>
 
 **In progress 🔄**

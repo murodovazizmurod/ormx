@@ -1,6 +1,5 @@
 import logging
-import sqlite3
-from sqlite3 import Cursor
+from sqlite3 import *
 from typing import (
     List,
     Union,
@@ -18,6 +17,9 @@ from .models import Table
 from .testing import *
 
 logging.basicConfig(format='%(asctime)s - INFO - %(message)s', level=logging.INFO)
+
+__version__ = '0.1.4.12'
+__author__ = 'Murodov Azizmurod'
 
 
 class Database:
@@ -37,7 +39,7 @@ class Database:
         path : PathType
             Local __str__ to database (PathType)
         """
-        self.conn = sqlite3.connect(path, check_same_thread=False, detect_types=sqlite3.PARSE_DECLTYPES)
+        self.conn = connect(path, check_same_thread=False, detect_types=PARSE_DECLTYPES)
         self.cur = self.conn.cursor()
         self.config = Config()
 
@@ -67,7 +69,7 @@ class Database:
             if params:
                 return self.conn.execute(sql, params)
             return self.conn.execute(sql)
-        except sqlite3.OperationalError as e:
+        except OperationalError as e:
             print(e)
 
     @property
@@ -184,18 +186,20 @@ class Database:
         :return:
             Table Object
         """
-
-        sql, fields, params = table._get_select_where_sql(fields=fields, **kwargs)
-        result = []
-        for row in self._execute(sql, params).fetchall():
-            new_fields, row = self._dereference(table, fields, row)
-            data = dict(zip(new_fields, row))
-            result.append(table(**data))
-        if len(result) == 1:
-            return result[0]
-        elif len(result) == 0:
-            return None
-        return tuple(result)
+        try:
+            sql, fields, params = table._get_select_where_sql(fields=fields, **kwargs)
+            result = []
+            for row in self._execute(sql, params).fetchall():
+                new_fields, row = self._dereference(table, fields, row)
+                data = dict(zip(new_fields, row))
+                result.append(table(**data))
+            if len(result) == 1:
+                return result[0]
+            elif len(result) == 0:
+                return None
+            return tuple(result)
+        except Exception:
+            pass
 
     def update(self, instance: Table):
         sql, values = instance._get_update_sql()
