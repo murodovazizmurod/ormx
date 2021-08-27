@@ -18,6 +18,7 @@ from .testing import *
 
 logging.basicConfig(format='%(asctime)s - INFO - %(message)s', level=logging.INFO)
 
+
 __version__ = '0.1.4.12'
 __author__ = 'Murodov Azizmurod'
 
