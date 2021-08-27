@@ -3,12 +3,12 @@ from distutils.core import setup
 setup(
     name='ormx',
     packages=['ormx'],
-    version='0.1.4.9',
+    version='0.1.4.11',
     license='MIT',
     description='SQLite3 ORM package',
     author='Murodov Azizmurod',
     author_email='murodovazizmurod@gmail.com',
-    url='https://github.com/murodovazizmurod/ormx',
+    url='https://murodovazizmurod.github.io/ormx/',
     download_url='https://github.com/murodovazizmurod/ormx/archive/v_01.tar.gz',
     keywords=['ormx', 'orm', 'python-orm', 'python'],
     install_requires=[

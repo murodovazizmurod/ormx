@@ -1,7 +1,7 @@
 from ormx import Database
 from ormx.models import (
     Table,
-    Column
+    Column, ForeignKey
 )
 from ormx.types import *
 
@@ -23,24 +23,21 @@ class Post(Table):
     __tablename__ = 'posts'
     title = Column(str)
     draft = Column(bool)
+    author = ForeignKey(Author)
 
 # db.create(Author)
 # db.create(Post)
 # #
-# db.save(Author(name="Linus", age=99))
-#
-# db.save(Post(title="Programming",
-#              draft=False,
-#              author=db.get(Author, id=1)))
-# #
+# author = Author(name="Linus", age=99)
+# db.save(author)
 
 
-test_post = db.get(Post, title="Programming")
+#
+
+
+test_post = db.get(Post, author_id=1)
 #
 #
-test_author = db.all(Post, where=[
-                        ('title', 'LIKE', "Programming"), AND,
-                        ('draft', '!=', 1), OR, ('draft', '!=', 1)
-                    ],
-                     limit=[2],
-                     )
+test_author = db.all(Post, where=['author_id', '==', 1])
+
+print(test_post)
