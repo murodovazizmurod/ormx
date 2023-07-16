@@ -5,8 +5,6 @@
     <a href="https://badge.fury.io/py/ormx"><img src="https://badge.fury.io/py/ormx.svg" alt="PyPI version" height="18"></a>
     <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/murodovazizmurod/ormx">
     <a href="https://github.com/murodovazizmurod/ormx/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/murodovazizmurod/ormx"></a><br>
-    <a href="https://lgtm.com/projects/g/murodovazizmurod/ormx/alerts/"><img alt="Total alerts" src="https://img.shields.io/lgtm/alerts/g/murodovazizmurod/ormx.svg?logo=lgtm&logoWidth=18"/></a>
-    <a href="https://lgtm.com/projects/g/murodovazizmurod/ormx/context:python"><img alt="Language grade: Python" src="https://img.shields.io/lgtm/grade/python/g/murodovazizmurod/ormx.svg?logo=lgtm&logoWidth=18"/></a>
     <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/murodovazizmurod/ormx">
     <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/murodovazizmurod/ormx"><br>
     <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/murodovazizmurod/ormx">
